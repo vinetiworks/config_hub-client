@@ -1,7 +1,7 @@
 # Ruby ConfigHub client
 ### Setup
 ```ruby
-client = ConfigHubApi::Client.new(
+client = ConfigHub::Client.new(
     'https://config.example.com',
     'your-confighub-token',
     'context1;context2;context3'
