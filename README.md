@@ -1,10 +1,15 @@
 # Ruby ConfigHub client
 
 ### Installation
-Gemfile
+Add this to your Gemfile:
 ```ruby
 gem 'config_hub-client'
 ```
+then `bundle install`
+
+Or install globally:
+
+`gem install config_hub-client`
 
 ### Setup
 ```ruby
