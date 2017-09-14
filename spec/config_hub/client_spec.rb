@@ -64,10 +64,10 @@ RSpec.describe ConfigHub::Client do
 
     describe '#to_h' do
       it 'returns a hash of the keys to values from the properties' do
-        expect(subject.to_h).to include(
+        expect(subject.to_h).to eq({
           'salesforce.web_host' => 'http://scheduling.example.com',
           'thiskeyisnil' => nil
-        )
+        })
       end
     end
 
