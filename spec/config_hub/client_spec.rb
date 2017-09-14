@@ -64,7 +64,7 @@ RSpec.describe ConfigHub::Client do
 
     describe '#to_h' do
       it 'should raise an error if config was not pulled' do
-        expect { subject.fetch('salesforce.web_host') }.to raise_error(ConfigHub::ConfigNotPulledError)
+        expect { subject.to_h }.to raise_error(ConfigHub::ConfigNotPulledError)
       end
 
       describe 'when config has been pulled' do
