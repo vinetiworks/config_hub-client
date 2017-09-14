@@ -38,8 +38,6 @@ module ConfigHub
     end
 
     def to_h
-      pull
-
       @data['properties'].reduce({}) do |hash, (k, v)|
         hash.merge(k => v['val'])
       end

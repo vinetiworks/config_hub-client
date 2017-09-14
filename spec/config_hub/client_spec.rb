@@ -63,11 +63,21 @@ RSpec.describe ConfigHub::Client do
     end
 
     describe '#to_h' do
-      it 'returns a hash of the keys to values from the properties' do
-        expect(subject.to_h).to eq({
-          'salesforce.web_host' => 'http://scheduling.example.com',
-          'thiskeyisnil' => nil
-        })
+      it 'should raise an error if config was not pulled' do
+        expect { subject.fetch('salesforce.web_host') }.to raise_error(ConfigHub::ConfigNotPulledError)
+      end
+
+      describe 'when config has been pulled' do
+        before do
+          subject.pull
+        end
+
+        it 'returns a hash of the keys to values from the properties' do
+          expect(subject.to_h).to eq({
+            'salesforce.web_host' => 'http://scheduling.example.com',
+            'thiskeyisnil' => nil
+          })
+        end
       end
     end
 
