@@ -23,7 +23,7 @@ module ConfigHub
     end
 
     def fetch(key)
-      if @data
+      if config_pulled?
         val = @data.dig('properties', key.to_s, 'val')
         if val.nil?
           if block_given? && !@data['properties'].key?(key.to_s)
@@ -31,6 +31,16 @@ module ConfigHub
           end
         else
           val
+        end
+      else
+        raise ConfigNotPulledError
+      end
+    end
+
+    def to_h
+      if config_pulled?
+        @data['properties'].reduce({}) do |hash, (k, v)|
+          hash.merge(k => v['val'])
         end
       else
         raise ConfigNotPulledError
