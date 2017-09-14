@@ -62,6 +62,14 @@ RSpec.describe ConfigHub::Client do
       end
     end
 
+    describe '#to_h' do
+      it 'returns a hash of the keys to values from the properties' do
+        expect(subject.to_h).to include(
+          'salesforce.web_host' => 'http://scheduling.example.com',
+          'thiskeyisnil' => nil
+        )
+      end
+    end
 
     describe 'request headers' do
       let(:options) do
