@@ -11,16 +11,16 @@ RSpec.describe ConfigHub::Client do
     subject { described_class.new(base_url, token, context, options) }
     let(:response) do
       {
-        "generatedOn"=>"08/29/2017 00:20:23",
-        "account"=>"MyAcct",
-        "repo"=>"MyApp",
-        "context"=>"test;tenant;dev-1",
-        "files"=>{},
-        "properties"=>{
-          "salesforce.web_host"=>{
-            "val"=>"http://scheduling.example.com"
+        'generatedOn' => '08/29/2017 00:20:23',
+        'account' => 'MyAcct',
+        'repo' => 'MyApp',
+        'context' => 'test;tenant;dev-1',
+        'files' => {},
+        'properties' => {
+          'salesforce.web_host' => {
+            'val' => 'http://scheduling.example.com'
           },
-          "thiskeyisnil"=>{}
+          'thiskeyisnil' => {}
         }
       }
     end
@@ -73,17 +73,15 @@ RSpec.describe ConfigHub::Client do
         end
 
         it 'returns a hash of the keys to values from the properties' do
-          expect(subject.to_h).to eq({
-            'salesforce.web_host' => 'http://scheduling.example.com',
-            'thiskeyisnil' => nil
-          })
+          expect(subject.to_h).to eq('salesforce.web_host' => 'http://scheduling.example.com',
+                                     'thiskeyisnil' => nil)
         end
       end
     end
 
     describe 'request headers' do
       let(:options) do
-        {headers: {some_other_header: 'a value'}}
+        { headers: { some_other_header: 'a value' } }
       end
 
       it 'should add options as headers' do
