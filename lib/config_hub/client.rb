@@ -11,7 +11,7 @@ module ConfigHub
       @options = options
       env = options[:environment] || defined?(Rails) ? Rails.env : 'development'
       faraday_opts = options[:faraday] || {}
-      @conn = Faraday.new(server_url, ssl: {verify: env == 'production'}.merge(faraday_opts), headers: headers)
+      @conn = Faraday.new(server_url, ssl: { verify: env == 'production' }.merge(faraday_opts), headers: headers)
     end
 
     def pull
@@ -26,9 +26,7 @@ module ConfigHub
       if config_pulled?
         val = @data.dig('properties', key.to_s, 'val')
         if val.nil?
-          if block_given? && !@data['properties'].key?(key.to_s)
-            yield
-          end
+          yield if block_given? && !@data['properties'].key?(key.to_s)
         else
           val
         end
