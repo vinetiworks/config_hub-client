@@ -24,6 +24,7 @@ module ConfigHub
 
     def fetch(key)
       if config_pulled?
+        ap data: @data
         val = @data.dig('properties', key.to_s, 'val')
         if val.nil?
           yield if block_given? && !@data['properties'].key?(key.to_s)
