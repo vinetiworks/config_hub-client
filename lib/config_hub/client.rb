@@ -24,11 +24,11 @@ module ConfigHub
 
     def fetch(key)
       if config_pulled?
-        val = @data.dig('properties', key.to_s, 'val')
-        if val.nil?
-          yield if block_given? && !@data['properties'].key?(key.to_s)
+        item = @data['properties'][key.to_s]
+        if item.nil?
+          yield if block_given?
         else
-          val
+          cast item['val'], item['type']
         end
       else
         raise ConfigNotPulledError
@@ -46,6 +46,21 @@ module ConfigHub
     end
 
     private
+
+    def cast(val, type)
+      case type
+      when 'Boolean'
+        val == 'true'
+      when 'Integer', 'Long'
+        val.to_i
+      when 'Float', 'Double'
+        val.to_f
+      when 'JSON'
+        JSON.parse(val)
+      else
+        val
+      end
+    end
 
     def retrieve_remote_config
       res = @conn.get('/rest/pull')

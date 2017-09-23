@@ -20,7 +20,31 @@ RSpec.describe ConfigHub::Client do
           'salesforce.web_host' => {
             'val' => 'http://scheduling.example.com'
           },
-          'thiskeyisnil' => {}
+          'thiskeyisnil' => {},
+          'aboolean' => {
+            'val' => 'false',
+            'type' => 'Boolean'
+          },
+          'afloat' => {
+            'val' => '2',
+            'type' => 'Float'
+          },
+          'along' => {
+            'val' => '2',
+            'type' => 'Long'
+          },
+          'ainteger' => {
+            'val' => '2',
+            'type' => 'Integer'
+          },
+          'adouble' => {
+            'val' => '2',
+            'type' => 'Double'
+          },
+          'ajson' => {
+            'val' => "{\"key\": \"value\"}",
+            'type' => "JSON"
+          }
         }
       }
     end
@@ -59,6 +83,30 @@ RSpec.describe ConfigHub::Client do
         it 'should not use default value if key is intentionally nil' do
           expect(subject.fetch('thiskeyisnil') { 'foo' }).to eq(nil)
         end
+
+        it 'should cast Boolean values' do
+          expect(subject.fetch('aboolean')).to eq(false)
+        end
+
+        it 'should cast Integer values' do
+          expect(subject.fetch('ainteger')).to eq(2)
+        end
+
+        it 'should cast Float values' do
+          expect(subject.fetch('afloat')).to eq(2.0)
+        end
+
+        it 'should cast Long values' do
+          expect(subject.fetch('along')).to eq(2)
+        end
+
+        it 'should cast Double values' do
+          expect(subject.fetch('adouble')).to eq(2.0)
+        end
+
+        it 'should cast JSON values' do
+          expect(subject.fetch('ajson')).to eq({'key' => 'value'})
+        end
       end
     end
 
@@ -73,8 +121,9 @@ RSpec.describe ConfigHub::Client do
         end
 
         it 'returns a hash of the keys to values from the properties' do
-          expect(subject.to_h).to eq('salesforce.web_host' => 'http://scheduling.example.com',
-                                     'thiskeyisnil' => nil)
+          expect(subject.to_h).to be_a(Hash)
+          expect(subject.to_h.keys).to include('salesforce.web_host', 'thiskeyisnil')
+          expect(subject.to_h['salesforce.web_host']).to eq 'http://scheduling.example.com'
         end
       end
     end
