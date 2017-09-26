@@ -23,15 +23,19 @@ module ConfigHub
     end
 
     def fetch(key)
-      if config_pulled?
+      if has?(key)
         item = @data['properties'][key.to_s]
-        if item.nil?
-          yield if block_given?
-        else
-          cast item['val'], item['type']
-        end
+        cast item['val'], item['type']
+      elsif block_given?
+        yield
+      end
+    end
+
+    def fetch_file(key)
+      if config_pulled? && @data['files'].present?
+        @data.dig('files', key, 'content')
       else
-        raise ConfigNotPulledError
+        retrieve_remote_file(key)
       end
     end
 
@@ -40,6 +44,15 @@ module ConfigHub
         @data['properties'].reduce({}) do |hash, (k, v)|
           hash.merge(k => v['val'])
         end
+      else
+        raise ConfigNotPulledError
+      end
+    end
+
+    def has?(key)
+      if config_pulled?
+        props = @data['properties']
+        props && props.key?(key.to_s)
       else
         raise ConfigNotPulledError
       end
@@ -59,6 +72,19 @@ module ConfigHub
         JSON.parse(val)
       else
         val
+      end
+    end
+
+    def retrieve_remote_file(key)
+      res = @conn.get('/rest/rawFile') do |req|
+        req.headers['File'] = key
+      end
+      if res.status == 200
+        res.body
+      elsif res.status == 204
+        nil
+      else
+        raise RequestError.new('Could not retrieve raw file', res)
       end
     end
 
