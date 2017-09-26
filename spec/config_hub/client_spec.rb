@@ -150,10 +150,6 @@ RSpec.describe ConfigHub::Client do
         end
 
         before do
-          # conn = subject.instance_variable_get(:@conn)
-          # stub_faraday_request(conn) do |stub|
-          #   stub.get('/rest/pull') { [406, headers, ''] }
-          # end
           stub_request(:get, "#{base_url}/rest/pull").to_return(status: 406)
         end
 
