@@ -42,6 +42,9 @@ value = client.fetch('your.config.key') { 'default value' }
 # get a file's contents
 file = client.fetch_file('your.file.key')
 
-# if you have pulled config without the No-Files option the file will be returned from local cache
-# if you have not pulled, or have pulled with the No-Files option, then a request will be made to /rest/rawFile
+# if you have pulled config without the No-Files option 
+# the file will be returned from local cache
+
+# if you have not pulled, or have pulled with the No-Files option
+# then a request will be made to /rest/rawFile
 ```
